@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Acme.Repository.Ad>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AdName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdContent)
+        </th>
+        <th>
+            @Html.DisplayName("Newspaper List")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AdName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AdContent)
+        </td>
+        <td>
+       <ul>
+        @foreach (var p in item.Newspapers)
+{
+    <li> @p.NewspaperName </li>
+}
+        </ul>
+    </td>
+    </tr>
+}
+
+</table>

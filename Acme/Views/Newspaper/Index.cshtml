@@ -1,0 +1,26 @@
+﻿@model  IList<Acme.Repository.Newspaper>
+
+@{
+    ViewBag.Title = "Available Newspaper";
+}
+
+
+
+<div>
+    <h4>Newspaper List</h4>
+	<hr />
+    <ul class="dl-horizontal">
+        @foreach(Acme.Repository.Newspaper p  in Model)
+        { 
+       <li>
+            
+            @Html.DisplayName( @p.NewspaperName)
+        </li>
+        }
+
+    </ul>
+    <hr/>
+</div>
+<p>
+
+</p>

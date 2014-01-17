@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HenryDemoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ad">
+          <Key>
+            <PropertyRef Name="ad_id" />
+          </Key>
+          <Property Name="ad_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ad_name" Type="varchar" MaxLength="100" />
+          <Property Name="ad_content" Type="varchar" MaxLength="8000" />
+        </EntityType>
+        <EntityType Name="ad_newspaper_detail">
+          <Key>
+            <PropertyRef Name="ad_id" />
+            <PropertyRef Name="newspaper_id" />
+          </Key>
+          <Property Name="ad_id" Type="int" Nullable="false" />
+          <Property Name="newspaper_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="newspaper">
+          <Key>
+            <PropertyRef Name="newspaper_id" />
+          </Key>
+          <Property Name="newspaper_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="newspaper_name" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_ad_newspaper_detail_ad">
+          <End Role="ad" Type="Self.ad" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ad_newspaper_detail" Type="Self.ad_newspaper_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ad">
+              <PropertyRef Name="ad_id" />
+            </Principal>
+            <Dependent Role="ad_newspaper_detail">
+              <PropertyRef Name="ad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ad_newspaper_detail_newspaper">
+          <End Role="newspaper" Type="Self.newspaper" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ad_newspaper_detail" Type="Self.ad_newspaper_detail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="newspaper">
+              <PropertyRef Name="newspaper_id" />
+            </Principal>
+            <Dependent Role="ad_newspaper_detail">
+              <PropertyRef Name="newspaper_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HenryDemoModelStoreContainer">
+          <EntitySet Name="ad" EntityType="Self.ad" Schema="acme" store:Type="Tables" />
+          <EntitySet Name="ad_newspaper_detail" EntityType="Self.ad_newspaper_detail" Schema="acme" store:Type="Tables" />
+          <EntitySet Name="newspaper" EntityType="Self.newspaper" Schema="acme" store:Type="Tables" />
+          <AssociationSet Name="FK_ad_newspaper_detail_ad" Association="Self.FK_ad_newspaper_detail_ad">
+            <End Role="ad" EntitySet="ad" />
+            <End Role="ad_newspaper_detail" EntitySet="ad_newspaper_detail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ad_newspaper_detail_newspaper" Association="Self.FK_ad_newspaper_detail_newspaper">
+            <End Role="newspaper" EntitySet="newspaper" />
+            <End Role="ad_newspaper_detail" EntitySet="ad_newspaper_detail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HenryDemoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ad">
+          <Key>
+            <PropertyRef Name="ad_id" />
+          </Key>
+          <Property Name="ad_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ad_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ad_content" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="newspapers" Relationship="Self.ad_newspaper_detail" FromRole="ad" ToRole="newspaper" />
+        </EntityType>
+        <EntityType Name="newspaper">
+          <Key>
+            <PropertyRef Name="newspaper_id" />
+          </Key>
+          <Property Name="newspaper_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="newspaper_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ads" Relationship="Self.ad_newspaper_detail" FromRole="newspaper" ToRole="ad" />
+        </EntityType>
+        <Association Name="ad_newspaper_detail">
+          <End Role="ad" Type="Self.ad" Multiplicity="*" />
+          <End Role="newspaper" Type="Self.newspaper" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="AcmeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ads" EntityType="Self.ad" />
+          <EntitySet Name="newspapers" EntityType="Self.newspaper" />
+          <AssociationSet Name="ad_newspaper_detail" Association="Self.ad_newspaper_detail">
+            <End Role="ad" EntitySet="ads" />
+            <End Role="newspaper" EntitySet="newspapers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HenryDemoModelStoreContainer" CdmEntityContainer="AcmeEntities">
+          <EntitySetMapping Name="ads">
+            <EntityTypeMapping TypeName="HenryDemoModel.ad">
+              <MappingFragment StoreEntitySet="ad">
+                <ScalarProperty Name="ad_id" ColumnName="ad_id" />
+                <ScalarProperty Name="ad_name" ColumnName="ad_name" />
+                <ScalarProperty Name="ad_content" ColumnName="ad_content" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="newspapers">
+            <EntityTypeMapping TypeName="HenryDemoModel.newspaper">
+              <MappingFragment StoreEntitySet="newspaper">
+                <ScalarProperty Name="newspaper_id" ColumnName="newspaper_id" />
+                <ScalarProperty Name="newspaper_name" ColumnName="newspaper_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ad_newspaper_detail" TypeName="HenryDemoModel.ad_newspaper_detail" StoreEntitySet="ad_newspaper_detail">
+            <EndProperty Name="ad">
+              <ScalarProperty Name="ad_id" ColumnName="ad_id" />
+            </EndProperty>
+            <EndProperty Name="newspaper">
+              <ScalarProperty Name="newspaper_id" ColumnName="newspaper_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
